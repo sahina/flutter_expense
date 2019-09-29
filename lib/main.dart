@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expense/transaction.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,6 +30,9 @@ class MyHomePage extends StatelessWidget {
     ),
   ];
 
+  String titleInput;
+  String amountInput;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,20 +40,103 @@ class MyHomePage extends StatelessWidget {
         title: Text('Flutter App'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
-              width: double.infinity,
-              child: Card(
-                child: Text("CHART"),
-                elevation: 5,
-                color: Colors.blue,
-              )),
+            width: double.infinity,
+            child: Card(
+              child: Text("CHART"),
+              elevation: 5,
+              color: Colors.blue,
+            ),
+          ),
+          //
+          // INPUT AREA
+          //
+          Card(
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Title',
+                    ),
+                    onChanged: (char) {
+                      titleInput = char;
+                    },
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Amount',
+                    ),
+                    onChanged: (val) {
+                      amountInput = val;
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('Add Transaction'),
+                    color: Colors.purple,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      print(titleInput);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            elevation: 5,
+          ),
+          //
+          // ITEMS
+          //
           Column(
-            children: transactions.map((t) {
+            children: transactions.map((tx) {
               return Card(
-                child: Text(t.title),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 15,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.purple,
+                          width: 2,
+                        ),
+                      ),
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "\$${tx.amount}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.purple),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          tx.title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          DateFormat.yMMMd().format(tx.date),
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               );
             }).toList(),
           )
